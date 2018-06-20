@@ -6,13 +6,13 @@ import Yup from 'yup';
 import "./styles.css";
 
 
-const App = ({values, handleChange}) => (
+const App = ({values, handleChange, handleSubmit}) => (
     <div className="App">
       <h1>Hello CodeSandbox</h1>
       <h2>Start editing to see some magic happen!</h2>
       <p>This is just a quick bit of content.</p>
 
-      <form>
+      <form onSubmit={handleSubmit}>
         <div>
           <label for='email'>Email address: </label>
           <input type='email' id='email' name='email' placeholder='e.g. john@smith.com' value={values.email} onChange={handleChange}/>
@@ -34,6 +34,9 @@ const FormikApp = withFormik({
       email: email || '',
       password: password || ''
     }
+  },
+  handleSubmit(values) {
+    console.log(values);
   }
   // mapPropsToValues1: () => ({
   //   email: 'some text'
