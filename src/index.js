@@ -28,6 +28,7 @@ const App = ({values, handleChange, handleSubmit}) => (
     </div>
 );
 
+
 const FormikApp = withFormik({
   mapPropsToValues({email, password}) {
     return {
