@@ -16,21 +16,27 @@ import "./styles.css";
 //   );
 // }
 
-const App = ({values}) => (
+const App = ({values, handleChange}) => (
     <div className="App">
       <h1>Hello CodeSandbox</h1>
       <h2>Start editing to see some magic happen!</h2>
       <p>This is just a quick bit of content.</p>
       <div>
-        <input type='email' name='email' placeholder='e.g. john@smith.com' value={values.email}/>
+        <label for='email'>Email address: </label>
+        <input type='email' id='email' name='email' placeholder='e.g. john@smith.com' value={values.email} onChange={handleChange}/>
       </div>
+      <div>
+        <label for='password'>Password: </label>
+        <input type='password' id='password' name='password' placeholder='Your password' value={values.password} onChange={handleChange} />
+      </div>      
     </div>
 );
 
 const FormikApp = withFormik({
-  mapPropsToValues() {
+  mapPropsToValues({email, password}) {
     return {
-      email: 'test text'
+      email: email || '',
+      password: password || ''
     }
   },
   mapPropsToValues1: () => ({
@@ -39,4 +45,4 @@ const FormikApp = withFormik({
 })(App);
 
 const rootElement = document.getElementById("root");
-ReactDOM.render(<FormikApp />, rootElement);
+ReactDOM.render(<FormikApp email='james@last.com'/>, rootElement);
