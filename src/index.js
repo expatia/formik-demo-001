@@ -50,7 +50,7 @@ const App = ({ values, errors, touched, isSubmitting }) => (
     <Form>
       <Email
         radId="email"
-        label="Busines email"
+        label="Business email"
         placeholder="Your email address"
         errors={errors}
         touched={touched}
