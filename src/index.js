@@ -41,14 +41,13 @@ import "./styles.css";
 //   </div>
 // );
 
-const App = ({ values, errors, touched }) => (
+const App = ({ values, errors, touched, isSubmitting }) => (
   <div className="App">
     <h1>Hello CodeSandbox</h1>
     <h2>Start editing to see some magic happen!</h2>
     <p>This is just a quick bit of content.</p>
 
     <Form>
-      
       <Email
         radId="email"
         label="Busines email"
@@ -56,7 +55,6 @@ const App = ({ values, errors, touched }) => (
         errors={errors}
         touched={touched}
       />
-      
 
       <div>
         <label htmlFor="password">Password: </label>
@@ -85,7 +83,7 @@ const App = ({ values, errors, touched }) => (
         </Field>
       </div>
       <div>
-        <button className="btn btn-primary">Submit</button>
+        <button className="btn btn-primary" disabled={isSubmitting}>Submit</button>
       </div>
     </Form>
   </div>
@@ -113,13 +111,25 @@ const FormikApp = withFormik({
       plan: plan || "free"
     };
   },
-  validationSchema: Yup.object().shape({    
-    email: Yup.string().email().required(),
-    password: Yup.string().min(9).required(),
+  validationSchema: Yup.object().shape({
+    email: Yup.string()
+      .email("O endereco nao esta valido")
+      .required("Este campo e obrigatorio"),
+    password: Yup.string()
+      .min(9, "Tem que ser ao menos 9 letras")
+      .required("Password e obrigatorio")
   }),
-  handleSubmit(values) {
-    // alert("handling submit!");
-    console.log(values);
+  handleSubmit(values, { setErrors, resetForm, setSubmitting }) {
+    setTimeout(() => {
+      if (values.email === "jim@kirk.com") {
+        setErrors({ email: "That email is reserved for a future hero!" });
+      } else {
+        // Do something with the data: post it, store it, or whatever.
+        console.log("Processing valid data: ", values);
+        resetForm();
+      }
+      setSubmitting(false);
+    }, 2000);
   }
   // mapPropsToValues1: () => ({
   //   email: 'some text'
@@ -127,4 +137,4 @@ const FormikApp = withFormik({
 })(App);
 
 const rootElement = document.getElementById("root");
-ReactDOM.render(<FormikApp email="james@last.com" />, rootElement);
+ReactDOM.render(<FormikApp />, rootElement);
