@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { withFormik, Form, Field } from "formik";
-import Yup from "yup";
+import * as Yup from "yup";
 
 import "./styles.css";
 
@@ -41,34 +41,40 @@ import "./styles.css";
 //   </div>
 // );
 
-const App = ({ values, handleChange }) => (
+const App = ({ values, errors, touched }) => (
   <div className="App">
     <h1>Hello CodeSandbox</h1>
     <h2>Start editing to see some magic happen!</h2>
     <p>This is just a quick bit of content.</p>
 
     <Form>
+      
+      <Email
+        radId="email"
+        label="Busines email"
+        placeholder="Your email address"
+        errors={errors}
+        touched={touched}
+      />
+      
+
       <div>
-        <label for="email">Email address: </label>
+        <label htmlFor="password">Password: </label>
         <Field
-          type="email"
-          id="email"
-          name="email"
-          placeholder="e.g. john@smith.com"
-        />
-      </div>
-      <div>
-        <label for="password">Password: </label>
-        <input
           type="password"
           id="password"
           name="password"
           placeholder="Your password"
         />
+        {touched.password && errors.password && <p>{errors.password}</p>}
       </div>
       <div>
         <label>
-          <Field type="checkbox" name="newsletter" checked={values.newsletter} />
+          <Field
+            type="checkbox"
+            name="newsletter"
+            checked={values.newsletter}
+          />
           &nbsp;Join our newsletter
         </label>
       </div>
@@ -84,15 +90,33 @@ const App = ({ values, handleChange }) => (
     </Form>
   </div>
 );
+
+const Email = ({ radId, placeholder, label, errors, touched }) => (
+  <div>
+    <label htmlFor="email">{label || "Email address"}:&nbsp;</label>
+    {touched[radId] && errors[radId] && <p>{errors[radId]}</p>}
+    <Field
+      type="email"
+      id={radId}
+      name={radId}
+      placeholder={placeholder || "e.g. johnny@smith.com"}
+    />
+  </div>
+);
+
 const FormikApp = withFormik({
   mapPropsToValues({ email, password, newsletter, plan }) {
     return {
       email: email || "",
       password: password || "",
       newsletter: newsletter || true,
-      plan: plan || 'free'
+      plan: plan || "free"
     };
   },
+  validationSchema: Yup.object().shape({    
+    email: Yup.string().email().required(),
+    password: Yup.string().min(9).required(),
+  }),
   handleSubmit(values) {
     // alert("handling submit!");
     console.log(values);
